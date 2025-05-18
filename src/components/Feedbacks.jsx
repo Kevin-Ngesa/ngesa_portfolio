@@ -1,66 +1,85 @@
-import React from "react";
-import { motion } from "framer-motion";
-
-import { styles } from "../styles";
-import { SectionWrapper } from "../hoc";
-import { fadeIn, textVariant } from "../utils/motion";
+import { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { testimonials } from "../constants";
-
-const FeedbackCard = ({
-  index,
-  testimonial,
-  name,
-  designation,
-  company,
-  image,
-}) => (
-  <motion.div
-    variants={fadeIn("", "spring", index * 0.5, 0.75)}
-    className='bg-black-200 p-10 rounded-3xl xs:w-[320px] w-full'
-  >
-    <p className='text-white font-black text-[48px]'>"</p>
-
-    <div className='mt-1'>
-      <p className='text-white tracking-wider text-[18px]'>{testimonial}</p>
-
-      <div className='mt-7 flex justify-between items-center gap-1'>
-        <div className='flex-1 flex flex-col'>
-          <p className='text-white font-medium text-[16px]'>
-            <span className='blue-text-gradient'>@</span> {name}
-          </p>
-          <p className='mt-1 text-secondary text-[12px]'>
-            {designation} of {company}
-          </p>
-        </div>
-
-        <img
-          src={image}
-          alt={`feedback_by-${name}`}
-          className='w-10 h-10 rounded-full object-cover'
-        />
-      </div>
-    </div>
-  </motion.div>
-);
+import { styles } from "../styles";
 
 const Feedbacks = () => {
+  const controls = useAnimation();
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Start animation on mount
+  useEffect(() => {
+    controls.start({
+      x: ["0%", "-50%"],
+      transition: {
+        ease: "linear",
+        duration: 30,
+        repeat: Infinity,
+      },
+    });
+  }, [controls]);
+
   return (
-    <div className={`mt-12 bg-black-100 rounded-[20px]`}>
+    <section className="w-full px-4 py-16 bg-primary text-white overflow-hidden">
+      {/* Heading */}
+      <div className={`${styles.sectionDivStyling}`}>
+        <h2 className={`${styles.sectionHeadText}`}>
+          Testimonials
+          <span className={`${styles.smartUnderline}`} />
+        </h2>
+      </div>
+
+      {/* Scrolling testimonials */}
       <div
-        className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[300px]`}
+        className="overflow-hidden"
+        onMouseEnter={() => {
+          setIsHovered(true);
+          controls.stop();
+        }}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          controls.start({
+            x: ["0%", "-50%"],
+            transition: {
+              ease: "linear",
+              duration: 30,
+              repeat: Infinity,
+            },
+          });
+        }}
       >
-        <motion.div variants={textVariant()}>
-          <p className={styles.sectionSubText}>What others say</p>
-          <h2 className={styles.sectionHeadText}>Testimonials.</h2>
+        <motion.div
+          className="flex w-max gap-4 sm:gap-6"
+          animate={controls}
+          initial={{ x: "0%" }}
+        >
+          {[...testimonials, ...testimonials].map((item, index) => (
+            <div
+              key={index}
+              className="min-w-[180px] sm:min-w-[240px] md:min-w-[260px] max-w-[250px] bg-gray-800 border border-green-300/20 rounded-lg p-4 text-center flex-shrink-0"
+            >
+              <p className="text-white text-sm sm:text-base italic mb-4">
+                "{item.testimonial}"
+              </p>
+              <div className="flex items-center justify-center mb-2">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-green-500"
+                />
+              </div>
+              <h3 className="text-green-400 font-semibold text-sm sm:text-base">
+                {item.name}
+              </h3>
+              <p className="text-xs sm:text-sm text-secondary">
+                {item.designation} at {item.company}
+              </p>
+            </div>
+          ))}
         </motion.div>
       </div>
-      <div className={`-mt-20 pb-14 ${styles.paddingX} flex flex-wrap gap-7`}>
-        {testimonials.map((testimonial, index) => (
-          <FeedbackCard key={testimonial.name} index={index} {...testimonial} />
-        ))}
-      </div>
-    </div>
+    </section>
   );
 };
 
-export default SectionWrapper(Feedbacks, "");
+export default Feedbacks;

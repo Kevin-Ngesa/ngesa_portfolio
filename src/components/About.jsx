@@ -1,66 +1,53 @@
-import React from "react";
-import Tilt from "react-tilt";
-import { motion } from "framer-motion";
 
-import { styles } from "../styles";
-import { services } from "../constants";
 import { SectionWrapper } from "../hoc";
-import { fadeIn, textVariant } from "../utils/motion";
-
-const ServiceCard = ({ index, title, icon }) => (
-  <Tilt className='xs:w-[250px] w-full'>
-    <motion.div
-      variants={fadeIn("right", "spring", index * 0.5, 0.75)}
-      className='w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card'
-    >
-      <div
-        options={{
-          max: 45,
-          scale: 1,
-          speed: 450,
-        }}
-        className='bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col'
-      >
-        <img
-          src={icon}
-          alt='web-development'
-          className='w-16 h-16 object-contain'
-        />
-
-        <h3 className='text-white text-[20px] font-bold text-center'>
-          {title}
-        </h3>
-      </div>
-    </motion.div>
-  </Tilt>
-);
+import { styles } from "../styles";
+import { profile } from "../assets";
 
 const About = () => {
   return (
-    <>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Introduction</p>
-        <h2 className={styles.sectionHeadText}>Overview.</h2>
-      </motion.div>
-
-      <motion.p
-        variants={fadeIn("", "", 0.1, 1)}
-        className='mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]'
-      >
-        I'm a skilled software developer with experience in TypeScript and
-        JavaScript, and expertise in frameworks like React, Node.js, and
-        Three.js. I'm a quick learner and collaborate closely with clients to
-        create efficient, scalable, and user-friendly solutions that solve
-        real-world problems. Let's work together to bring your ideas to life!
-      </motion.p>
-
-      <div className='mt-20 flex flex-wrap gap-10'>
-        {services.map((service, index) => (
-          <ServiceCard key={service.title} index={index} {...service} />
-        ))}
+    <section className={`${styles.sectionStyling} `}>
+      {/* Heading */}
+      <div className={`${styles.sectionDivStyling}`}>
+        <h2 className={`${styles.sectionHeadText}`}>
+          About Me
+          {/* Smart underline */}
+          <span className={`${styles.smartUnderline}`}/>
+        </h2>
       </div>
-    </>
+
+      {/* Content Container */}
+      <div className="flex flex-col md:flex-row items-center gap-10 max-w-6xl mx-auto">
+        {/* Left: Image */}
+        <div className="w-64 h-64 border-2 border-green-400 rounded-md overflow-hidden">
+          <img
+            src={profile} // replace with your image path
+            alt="My Portrait"
+            className="object-cover w-full h-full"
+          />
+        </div>
+
+        {/* Right: Description + Buttons */}
+        <div className="flex-1 text-left">
+          <p className="text-lg mb-6">
+           Hi, I'm Ngesa Kevin— a MERN stack developer who builds responsive, user-friendly web applications that help businesses grow.
+I specialize in developing practical, high-performing solutions that simplify workflows, improve user experience, and drive revenue. 
+With a focus on clean code and real-world results, I turn ideas into powerful digital tools.
+          </p>
+
+          <div className="flex flex-wrap gap-4">
+            {["React.js", "Node.js", "MongoDB","Tailwind CSS","Framer-motion"].map((tech) => (
+              <button
+                key={tech}
+                className="px-5 py-2 border-2 border-green-500 text-green-600 font-semibold rounded-full hover:bg-green-500 hover:text-white transition"
+              >
+                {tech}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default SectionWrapper(About, "about");
+export default SectionWrapper(About,'about') ;

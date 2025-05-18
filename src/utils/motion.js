@@ -15,6 +15,16 @@ export const textVariant = (delay) => {
     },
   };
 };
+export const horizontalLoop = (duration = 30) => ({
+  x: ["0%", "-50%"],
+  transition: {
+    ease: "linear",
+    duration,
+    repeat: Infinity,
+  },
+});
+
+
 
 export const fadeIn = (direction, type, delay, duration) => {
   return {
